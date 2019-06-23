@@ -5,6 +5,7 @@ import pandas as pd
 import operator
 import timeit
 import random
+from sys import getsizeof
 
 
 
@@ -81,6 +82,7 @@ def calculate_time(ips, infected_dataset):
     sel_k = sel_k.reset_index(level=0, drop=True)
     most_freq_minWise, ips_minWise = frequent_IPs(sel_k, 10)
 
+    most_freq_minWise_bytes = getsizeof(most_freq_minWise)
     stop_minWise = timeit.default_timer()
     minWise_time = stop_minWise - start_minWise
 
@@ -95,6 +97,7 @@ def calculate_time(ips, infected_dataset):
 
     # construct the matrix with the correct dimensions
     count_min_matrix = CountMinSketch(int(w), int(d))
+    count_min_matrix_bytes = getsizeof(count_min_matrix)
 
     # store ip addresses
     for ip in ips:
@@ -106,7 +109,7 @@ def calculate_time(ips, infected_dataset):
         count_min[ip] = count_min_matrix.point(ip)
 
     # sort frequencies according to their value
-    sorted_count_min  = sorted(count_min.items(), key=operator.itemgetter(1), reverse=True)
+    sorted_count_min = sorted(count_min.items(), key=operator.itemgetter(1), reverse=True)
 
     #  find the 10 most frequent ones
     ten_sorted_count_min = sorted_count_min[0:10]
@@ -115,8 +118,8 @@ def calculate_time(ips, infected_dataset):
 
     count_min_time = stop_countMin_sketch - start_countMin_sketch
 
-    print(minWise_time, count_min_time)
-
+    print("Min Wise execution time: ", minWise_time, "second    ", "memory :", most_freq_minWise_bytes, "bytes")
+    print("Count Min execution time: ", count_min_time, "second    ", "memory :", count_min_matrix_bytes, "bytes")
 
 def main():
 
