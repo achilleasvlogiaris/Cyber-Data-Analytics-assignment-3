@@ -69,14 +69,14 @@ def visualize(dataset_clean, dataset_infected):
     # ----------- first feature visualization -----------
 
     # investigate the protocol for the normal hosts
-    plt.title('Protocol usage for normal hosts')
+    plt.title('Protocols for normal hosts')
     dataset_normal = dataset_clean.loc[dataset_clean['binLabel'] == 1.0]
     sns.countplot(x="Protocol", data=dataset_normal)
     plt.show()
 
 
     # investigate the protocol for the infected host
-    plt.title('Protocol usage for infected host:' + infected_host)
+    plt.title('Protocols for infected host:' + infected_host)
     sns.countplot(x="Protocol", data=dataset_infected)
     plt.show()
 
@@ -138,7 +138,6 @@ def elbow(data):
     plt.plot(range(1, 10), dist)
     plt.title('Elbow rule')
     plt.xlabel('Number of Clusters')
-    plt.ylabel('Average within-cluster sum of squares')
     plt.grid(True)
     plt.title('Elbow curve')
     plt.show()

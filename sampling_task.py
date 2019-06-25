@@ -28,7 +28,7 @@ def main():
 
 
 
-    ###### min wise sampling
+    ###### reservoir sampling
     mse_list = []
     for reservoir_size in range(50, 1050, 50):
         for index, row in infected_dataset.iterrows():
@@ -39,25 +39,13 @@ def main():
         sample = sorted_dataset[0:reservoir_size]
         sample = sample.reset_index(drop=True)
         # print(sample)
-        Min_wise_TenMostFrequentIPs, all_ip = frequent_IPs(sample, 10)
+        reservoir_TenMostFrequentIPs, all_ip = frequent_IPs(sample, 10)
         print('=======> Value of reservoir:', reservoir_size)
-        print('Top 10:', Min_wise_TenMostFrequentIPs)
-        for ip in Min_wise_TenMostFrequentIPs:
+        print('Top 10:', reservoir_TenMostFrequentIPs)
+        for ip in reservoir_TenMostFrequentIPs:
             print('Element', ip, 'percentage', ip[1]*100.0/reservoir_size, '%')
 
-        # >>>>calculate mse error<<<
-        # count = 0
-        # for ip in Min_wise_TenMostFrequentIPs:
-        #     se = (ip[1] * 100.0 / reservoir_size - TenMostFrequentIPs[count][1] * 100.0 / len(infected_dataset)) ** 2
-        #     count += 1
-        # mse = (1 / 10) * se
-        # print(mse)
-        # mse_list.append(mse)
 
-    # print(mse_list)
-
-    # plt.plot(mse_list)
-    # plt.show()
 
 if __name__ == "__main__":
         main()

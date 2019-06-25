@@ -6,6 +6,7 @@ import operator
 import timeit
 import random
 from sys import getsizeof
+import time
 
 
 
@@ -34,8 +35,8 @@ def grid_search(e, ips, infected_dataset):
 
     # grid seach for different w and d
     count = 0
-    for epsilon in [0.0001, 0.001, 0.005, 0.01, 0.1]:
-        for delta in [0.0001, 0.001, 0.005, 0.01, 0.1]:
+    for epsilon in [0.0001, 0.001, 0.01]:
+        for delta in [0.0001, 0.001, 0.01]:
 
             # calculate the w, d
             w = round(e / epsilon)
@@ -59,6 +60,8 @@ def grid_search(e, ips, infected_dataset):
             ten_sorted_count_min = sorted_count_min[0:10]
 
             print("Iteration", count)
+            print("w    ", w)
+            print("d    ", d)
 
             for ip in ten_sorted_count_min:
                 print('Element', ip, 'percentage', ip[1] * 100.0 / len(infected_dataset), '%')
@@ -69,9 +72,10 @@ def grid_search(e, ips, infected_dataset):
 def calculate_time(ips, infected_dataset):
 
     # ------------Min-Wise time estimation-------------
-    start_minWise = timeit.default_timer()
+    start_reservoir = time.time()
 
-    k = 5000
+    # k = 5000
+    k = 2718 * 5
     for index, row in infected_dataset.iterrows():
         # begin by setting a random value at each row
         a = random.uniform(0, 1)
@@ -80,24 +84,23 @@ def calculate_time(ips, infected_dataset):
     sort_infections = infected_dataset.sort_values(['rn'], ascending=[True])
     sel_k = sort_infections[0:k]
     sel_k = sel_k.reset_index(level=0, drop=True)
-    most_freq_minWise, ips_minWise = frequent_IPs(sel_k, 10)
+    most_freq_reservoir, ips_reservoir = frequent_IPs(sel_k, 10)
 
-    most_freq_minWise_bytes = getsizeof(most_freq_minWise)
-    stop_minWise = timeit.default_timer()
-    minWise_time = stop_minWise - start_minWise
+    most_freq_reservoir_bytes = getsizeof(most_freq_reservoir)
+    stop_reservoir = time.time()
+    reservoir_time = stop_reservoir - start_reservoir
 
     # ------------Count-Min Sketch time estimation------------
-    start_countMin_sketch = timeit.default_timer()
+    start_countMin_sketch = time.time()
 
-    epsilon = 0.0001
-    delta = 0.0001
-    e = 2.718281828
-    w = round(e / epsilon)
-    d = round(math.log(1 / delta))
+    w = 2718
+    d = 5
+
+    print(w)
+    print(d)
 
     # construct the matrix with the correct dimensions
     count_min_matrix = CountMinSketch(int(w), int(d))
-    count_min_matrix_bytes = getsizeof(count_min_matrix)
 
     # store ip addresses
     for ip in ips:
@@ -114,12 +117,14 @@ def calculate_time(ips, infected_dataset):
     #  find the 10 most frequent ones
     ten_sorted_count_min = sorted_count_min[0:10]
 
-    stop_countMin_sketch = timeit.default_timer()
+    # count_min_matrix_bytes = getsizeof(ten_sorted_count_min)
+
+    stop_countMin_sketch = time.time()
 
     count_min_time = stop_countMin_sketch - start_countMin_sketch
 
-    print("Min Wise execution time: ", minWise_time, "second    ", "memory :", most_freq_minWise_bytes, "bytes")
-    print("Count Min execution time: ", count_min_time, "second    ", "memory :", count_min_matrix_bytes, "bytes")
+    print("Min Wise execution time: ", reservoir_time, "second    ")
+    print("Count Min execution time: ", count_min_time, "second    ")
 
 def main():
 
