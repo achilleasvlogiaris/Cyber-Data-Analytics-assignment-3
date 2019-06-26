@@ -3,7 +3,6 @@ import math
 from sampling_task import frequent_IPs
 import pandas as pd
 import operator
-import timeit
 import random
 from sys import getsizeof
 import time
