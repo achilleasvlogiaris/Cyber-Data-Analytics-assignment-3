@@ -29,7 +29,6 @@ def main():
 
 
     ###### reservoir sampling
-    mse_list = []
     for reservoir_size in range(50, 1050, 50):
         for index, row in infected_dataset.iterrows():
             rand = random.uniform(0, 1)

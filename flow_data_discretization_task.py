@@ -218,23 +218,23 @@ def main():
     dataset = read_dataset()
 
     # --------write--------
-    # dataset.to_pickle('dataset.pkl')
+    dataset.to_pickle('dataset.pkl')
 
     # --------read--------
-    # dataset = pd.read_pickle('dataset.pkl')
+    dataset = pd.read_pickle('dataset.pkl')
 
-    # dataset_clean, dataset_infected = remove_bkgd_flows(dataset)
+    dataset_clean, dataset_infected = remove_bkgd_flows(dataset)
 
     # --------write--------
-    # dataset_clean.to_pickle('dataset_clean.pkl')
-    # dataset_infected.to_pickle('dataset_infected.pkl')
+    dataset_clean.to_pickle('dataset_clean.pkl')
+    dataset_infected.to_pickle('dataset_infected.pkl')
 
     # --------read--------
     dataset_clean = pd.read_pickle('dataset_clean.pkl')
     dataset_infected = pd.read_pickle('dataset_infected.pkl')
 
 
-    # visualize(dataset_clean, dataset_infected)
+    visualize(dataset_clean, dataset_infected)
 
     discretize(dataset_clean, dataset_infected)
 
